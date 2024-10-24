@@ -2,11 +2,10 @@
 'use strict'
 
 import React, { useEffect, useState } from 'react';
-import { FetchAPI } from '../utilities/apiCall';
-import Button from '../reuseable-component/button';
-import TaskCard from './taskCard';
 import { useParams } from 'react-router-dom';
-import withModal from '../reuseable-component/modal';
+import { FetchAPI } from '../utilities/apiCall';
+import TaskCard from './taskCard';
+import {Loader, withModal, Button} from '../reuseable-component/index';
 import TaskForm from './taskForm';
 
 const TaskModelForm = withModal(TaskForm);
@@ -17,33 +16,42 @@ const Task = () => {
    const [taskList, setTaskList] = useState([]);
    const [loading, setLoading] = useState(false);
    const [taskData, setTaskData] =  useState({});
+   const [memberList, setMemberList] = useState({});
 
    useEffect(() => {
     fetchTask(id);
-   }, [])
+   }, [id])
+
+   useEffect(() => {
+    // This will log `memberList` after it is updated
+    console.log("------memberList useEffect", memberList);
+    }, [memberList]);
    
    async function fetchTask(id) {
        setLoading(true);
        const response = await FetchAPI(`task/project/${id}`, 'GET', {}, true);
        const data = await response.json();
        if(response.status === 200) {
-            console.log("----data", data);
+            setTaskList(data.data.task);
+            setMemberList(data.data.members ?? {});
             setLoading(false);
-            setTaskList(data.data)
-            
+            console.log(data.data);
+            console.log("------memberList", memberList);
+            console.log("----------setTaskList", taskList);
        }
    }
 
    const resetFormModal = () => {
-        console.log("------hit here");
         setTaskData({});
         taskFormModal();
-        console.log("--showModal", showModal);
     }
+
    const taskFormModal = () => {
         setShowModal(!showModal);
-   }
+    } 
+    
    return (
+        <>
        <div className="container-fluid">
            <div className="d-flex row my-4">
                <h2 className="col-lg-3">Task</h2>
@@ -51,7 +59,6 @@ const Task = () => {
            </div>
            {
               taskList.length > 0 &&  <div className="row"> 
-                    { loading && <p>...Loading</p>}
                     {
                         !loading && taskList && taskList.map((task) => {
                             return (
@@ -60,10 +67,12 @@ const Task = () => {
                         })
                     }
                     
-                </div>
+              </div>
             }
-            <TaskModelForm project_id={id} showModal={showModal} clickHandle={taskFormModal} fetchTask={fetchTask} taskData={taskData}/>
+            { Object.keys(memberList).length > 0 && <TaskModelForm project_id={id} showModal={showModal} clickHandle={taskFormModal} fetchTask={fetchTask} taskData={taskData} memberList={memberList} /> }
        </div>
+       { loading && <Loader /> }
+       </>
    )
 }
 

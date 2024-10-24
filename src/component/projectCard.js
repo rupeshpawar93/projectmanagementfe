@@ -2,7 +2,7 @@
 
 import React, { useContext} from "react";
 import { Link } from "react-router-dom";
-import Button from "../reuseable-component/button";
+import { Button } from "../reuseable-component/index";
 import { FetchAPI } from "../utilities/apiCall";
 import AuthContext from "../context/authContext";
 
@@ -17,6 +17,7 @@ const ProjectCard=(props) => {
         const data = await response.json();
         if(response.status===200) {
             fetchProject();
+            setLoading(false);
         }
     }
     
@@ -29,7 +30,7 @@ const ProjectCard=(props) => {
             <p className="card-text">Target Date: {targetCompletionDate}</p>
             <div className="d-flex justify-content-between mb-4">
                 <Link to={`project/${id}`} className="btn btn-primary">Go in Task List</Link>
-                <Link to={`task/${id}`} className="btn btn-primary">Task Count: {taskCount}</Link>
+                <Link to={`project/${id}`} className="btn btn-primary">Task Count: {taskCount}</Link>
             </div>
 
                 {

@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import ProjectForm from "./projectForm";
 import ProjectCard from "./projectCard";
-import withModal from "../reuseable-component/modal";
-import Button from "../reuseable-component/button";
+import { withModal, Loader, Button} from "../reuseable-component/index";
 import { FetchAPI } from "../utilities/apiCall";
 import AuthContext from "../context/authContext";
 
@@ -22,13 +21,13 @@ const Project = () => {
     const [members, setMembers] = useState({});
 
     useEffect(() => {
-      setLoading(true);
       fetchProject();
       return () => {
       }
     }, [pageNo, pageSize])
     
     async function fetchProject() {
+        setLoading(true);
         const response = await FetchAPI(`project?pageNo=${pageNo}&pageSize=${pageSize}`, 'GET', {}, true);
         const data = await response.json();
         if(response.status===200) {
@@ -57,7 +56,6 @@ const Project = () => {
                 { (isAdmin == 'true') && <div className="col-lg-9"><Button class="btn btn-primary" text="+ Project" clickHandle={resetFormModal}/></div>}
             </div>
             <div className="row"> 
-                { loading && <p>...Loading</p>}
                 {
                     !loading && projects && projects.map((project) => {
                         return (
@@ -68,6 +66,7 @@ const Project = () => {
                 }
                 <ProjectModalForm members={members} showModal={showModal} clickHandle={projectFromModal} fetchProject={fetchProject} projectData={projectData}/>
             </div>
+            { loading && <Loader /> }
         </div>
     )
 }

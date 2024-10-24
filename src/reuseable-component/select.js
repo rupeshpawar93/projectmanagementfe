@@ -4,7 +4,7 @@
 import React from "react";
 
 const Select = (props) => {
-    const { name, id, set, options, class: classSelect, value, defaultValue = 'Select Role', multiple=false} = props;
+    const { name, id, set, options, class: classSelect, value, defaultValue = 'Select Role', multiple='false'} = props;
     const handleSelect = (e) => {
         if(multiple === 'true') {
             const values = Array.from(e.target.selectedOptions, (option) => option.value);

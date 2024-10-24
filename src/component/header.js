@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from '../context/authContext';
 
-import Button from "../reuseable-component/button";
+import { Button } from "../reuseable-component/index";
 import { removeKeyInLocalStorage } from '../utilities/apiCall';
 
 const Header = () => {

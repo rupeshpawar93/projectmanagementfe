@@ -2,9 +2,9 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../reuseable-component/button";
+import {Button} from "../reuseable-component/index";
 import { FetchAPI } from '../utilities/apiCall';
-import { labelList, statusList, priorityList } from "../utilities/constants";
+import { labelList, statusList, priorityList, priorityColor } from "../utilities/constants";
 
 const TaskCard = (props) => {
     const { task, fetchTask, setLoading, setTaskData, taskFormModal } = props;
@@ -28,7 +28,7 @@ const TaskCard = (props) => {
             <h5 className="card-title">Title: {task.title}</h5>
             <p className="card-text">Label: {labelList[task.label]}</p>
             <p className="card-text">Status: {statusList[task.status]}</p>
-            <p className="card-text">Proirity: {priorityList[task.priority]}</p>
+            <p className={`card-text ${priorityColor[task.priority]}`}>Proirity: {priorityList[task.priority]}</p>
             <div className="d-lg-flex flex-row flex-sm-column flex-md-column flex-lg-row justify-content-between">
                 <Button class="btn btn-primary" text="Update" clickHandle={
                     () => {

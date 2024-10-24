@@ -7,9 +7,7 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
 import AuthContext from "../context/authContext";
-import Input from "../reuseable-component/input";
-import Button from "../reuseable-component/button";
-import Label from "../reuseable-component/label";
+import {Input, Button, Label} from "../reuseable-component/index";
 import {FetchAPI,  setKeyInLocalStorage, errorAPIFormat } from "../utilities/apiCall";
 
 
@@ -34,16 +32,13 @@ const Signin = () => {
             const response = await FetchAPI('user/signin', 'POST', { username, password }, false);
             const data = await response.json();
             if(response.status === 200) {
-                console.log("-------data", data);
                 setIsAuth(true);
                 setKeyInLocalStorage('token', data.data.token)
                 setIsAdmin(data.data.isAdmin)
                 setKeyInLocalStorage('bhoomika', data.data.isAdmin)
-
                 navigate('/')
             } else {
                 const errorResponse = errorAPIFormat(data.error);
-                console.log("------errorResponse--", errorResponse);
                 setErrors(errorResponse);
             }
         } else {

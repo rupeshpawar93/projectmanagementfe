@@ -3,16 +3,13 @@
 import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
 
-import Input from "../reuseable-component/input";
-import Button from "../reuseable-component/button";
-import Label from "../reuseable-component/label";
-import Select from "../reuseable-component/select";
+import { Button, Label, Select } from "../reuseable-component/index";
+
 
 import { FetchAPI, errorAPIFormat } from "../utilities/apiCall";
 import { roleList } from "../utilities/constants";
 
 const SignUp = () => {
-    console.log("==============backend url", process.env.REACT_APP_API_URL);
     const [name, setName] = useState('')
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
