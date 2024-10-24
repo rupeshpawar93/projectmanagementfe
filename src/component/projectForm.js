@@ -30,14 +30,14 @@ const ProjectForm = (props) => {
         const buttonClicked = e.nativeEvent.submitter.name;
         console.log("-------buttonClicked-", buttonClicked);
         if(buttonClicked === 'submit') {
-            const response = await FetchAPI('project', 'POST', { name, description, targetCompletionDate}, true);
+            const response = await FetchAPI('project', 'POST', { name, description, targetCompletionDate, assignedMember}, true);
             const data = await response.json();
             if(response.status === 200) {
                 clickHandle(false);
                 fetchProject();
             }
         } else {
-            const response = await FetchAPI(`project/${projectData.id}`, 'PATCH', { name, description, targetCompletionDate}, true);
+            const response = await FetchAPI(`project/${projectData.id}`, 'PATCH', { name, description, targetCompletionDate, assignedMember}, true);
             const data = await response.json();
             if(response.status === 200) {
                 clickHandle(false);
@@ -61,8 +61,8 @@ const ProjectForm = (props) => {
                     <Input type="date" class="form-control" set={setTargetCompletionDate} value={targetCompletionDate} name="targetCompletionDate" id="targetCompletionDate" required="true" />
                 </div>
                 <div className="form-group  my-4">
-                    <Label forId="assignedUser" text="Assigned To User"/>
-                    <Select multiple="true" class="form-control" set={setAssignedMember} options={members} name="assignedUser" id="assignedUser" defaultValue="Select Members" required="true" />
+                    <Label forId="assignedMember" text="Assigned To Member"/>
+                    <Select multiple="true" class="form-control" set={setAssignedMember} options={members} name="assignedMember" id="assignedMember" defaultValue="Select Members" required="true" />
                 </div>
                 {
                     Object.keys(projectData).length === 0 ? <Button name="submit" type="submit" class="btn btn-primary" text="Submit" /> :<Button name="update" type="submit" class="btn btn-primary" text="Update" />

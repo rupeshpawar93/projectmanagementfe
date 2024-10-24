@@ -2,7 +2,7 @@
 'use strict'
 
 import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 
 import { getKeyInLocalStorage, isTokenExpired, removeKeyInLocalStorage } from "../utilities/apiCall";
 import AuthContext from "../context/authContext";
@@ -13,8 +13,7 @@ const App = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const navigate = useNavigate();
-    console.log("----------isAuth", isAuth);
-    console.log("----------isAdmin", isAdmin);
+    const location = useLocation();
     useEffect(()=> {
         setIsAuth(getKeyInLocalStorage('token') ? true : false);
         setIsAdmin(getKeyInLocalStorage('bhoomika')?? false);
@@ -28,7 +27,9 @@ const App = () => {
             setIsAuth(false);
             removeKeyInLocalStorage('bhoomika');
             setIsAdmin(false);
-            navigate('/signin')
+            if (location.pathname !== '/signup') {
+                navigate('/signin');
+            }
         }
     }
     return (

@@ -50,27 +50,27 @@ const SignUp = () => {
                         <form onSubmit={handleSingup}>
                             <div className="form-outline mb-4">
                                 <Label class="form-label" forId="name" text="Name" />
-                                <Input type="text" name="name" id="name" set={setName} class="form-control form-control-md" required="true"/>
+                                <Input type="text" name="name" value={name} id="name" set={setName} class="form-control form-control-md" required="true"/>
                                 { errors && errors.name && <span className="text-danger">{errors.name}</span> }
                             </div>
                             <div className="form-outline mb-4">
                                 <Label class="form-label" forId="username" text="Username" />
-                                <Input type="text" name="username" id="username" set={setUsername} class="form-control form-control-md" required="true"/>
+                                <Input type="text" name="username" value={username} id="username" set={setUsername} class="form-control form-control-md" required="true"/>
                                 { errors && errors.username && <span className="text-danger">{errors.username}</span> }
                             </div>
                             <div className="form-outline mb-4">
                                 <Label class="form-label" forId="role" text="Role" />
-                                <Select type="text" name="role" id="role" set={setRole} options={roleList} class="form-control form-control-md" />
+                                <Select type="text" name="role" value={role} id="role" set={setRole} options={roleList} class="form-control form-control-md" />
                                 { errors && errors.role && <span className="text-danger">{errors.role}</span> }
                             </div>
                             <div className="form-outline mb-4">
                                 <Label class="form-label" forId="password" text="Password" />
-                                <Input type="password" name="password" set={setPassword} id="password" class="form-control form-control-md" required="true" />
+                                <Input type="password" value={password} name="password" set={setPassword} id="password" class="form-control form-control-md" required="true" />
                                 { errors && errors.password && <span className="text-danger">{errors.password}</span> }
                             </div>
                             <div className="form-outline mb-4">
                                 <Label class="form-label" forId="confirm-password" text="Confirm Password" />
-                                <Input type="password" name="confirm-password" set={setConfirmPassword} id="confirm-password" class="form-control form-control-md" required="true"/>
+                                <Input type="password" value={confirmPassword} name="confirm-password" set={setConfirmPassword} id="confirm-password" class="form-control form-control-md" required="true"/>
                                 { errors && errors.confirmPassword && <span className="text-danger">{errors.confirmPassword}</span> }
                             </div> 
                             <div className="d-flex flex-column justify-content-between">

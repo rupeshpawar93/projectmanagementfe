@@ -1,6 +1,6 @@
 'use strict'
 
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import moment from "moment";
 import Label from "../reuseable-component/label";
 import Input from "../reuseable-component/input";
@@ -8,9 +8,10 @@ import Button from "../reuseable-component/button";
 import { FetchAPI } from "../utilities/apiCall";
 import Select from "../reuseable-component/select";
 import { labelList, statusList, priorityList } from "../utilities/constants";
+import AuthContext from "../context/authContext";
 
 const TaskForm = (props) => {
-    console.log("--------props on taskForm", props);
+    const { isAdmin } = useContext(AuthContext);
     const { fetchTask, clickHandle, taskData, project_id } = props;
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -78,6 +79,12 @@ const TaskForm = (props) => {
                     <Label forId="targetCompletionDate" text="Target Completion Date"/>
                     <Input type="date" class="form-control" set={setTargetCompletionDate} value={targetCompletionDate} name="targetCompletionDate" id="targetCompletionDate" required="true" />
                 </div>
+                {
+                  isAdmin === 'true' && <div className="form-group  my-4">
+                        <Label forId="targetCompletionDate" text="Target Completion Date"/>
+                        <Input type="date" class="form-control" set={setTargetCompletionDate} value={targetCompletionDate} name="targetCompletionDate" id="targetCompletionDate" required="true" />
+                    </div>
+                }
                 {
                     Object.keys(taskData).length === 0 ? <Button name="submit" type="submit" class="btn btn-primary" text="Submit" /> : <Button name="update" type="submit" class="btn btn-primary" text="Update" />
                 }

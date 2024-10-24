@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import App from './src/component/app';
 import Home from './src/component/home';
 import Signin from './src/component/signin';
-import SignUp from './src/component/singup';
+import SignUp from './src/component/signup';
 import Project from './src/component/project';
 import Task from './src/component/task';
 

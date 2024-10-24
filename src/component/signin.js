@@ -4,6 +4,7 @@
 
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 import AuthContext from "../context/authContext";
 import Input from "../reuseable-component/input";
@@ -72,9 +73,10 @@ const Signin = () => {
                             <div className="d-flex flex-column justify-content-between">
                                 <Button class="btn btn-primary btn-lg mb-2" type="submit" text="Signin" />
                                 <span className="mb-2">OR</span>
-                                <Button class="btn btn-primary btn-lg mb-5" type="submit" text="Signup" />
+                                
                             </div>
                         </form>
+                        <Link to="/signup" className="btn btn-primary btn-lg mb-5">Signup</Link>
                     </div>
                 </div>
             </div>

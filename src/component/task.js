@@ -19,10 +19,7 @@ const Task = () => {
    const [taskData, setTaskData] =  useState({});
 
    useEffect(() => {
-    console.log("--taks page called before");
     fetchTask(id);
-    console.log("--taks page called after")
-
    }, [])
    
    async function fetchTask(id) {
@@ -38,14 +35,13 @@ const Task = () => {
    }
 
    const resetFormModal = () => {
+        console.log("------hit here");
         setTaskData({});
         taskFormModal();
+        console.log("--showModal", showModal);
     }
    const taskFormModal = () => {
         setShowModal(!showModal);
-   }
-   if(taskList.length === 0) {
-    return <div className="container-fluid"><p>No task present for this project</p></div>
    }
    return (
        <div className="container-fluid">
@@ -53,17 +49,20 @@ const Task = () => {
                <h2 className="col-lg-3">Task</h2>
                <div className="col-lg-9"><Button class="btn btn-primary" text="+ Task"  clickHandle={resetFormModal}/></div>
            </div>
-           <div className="row"> 
-               { loading && <p>...Loading</p>}
-               {
-                   !loading && taskList && taskList.map((task) => {
-                       return (
-                            <TaskCard key={task.id} task={task} taskFormModal={taskFormModal} setLoading={setLoading} fetchTask={fetchTask} setTaskData={setTaskData}/>
-                       )
-                   })
-               }
-               <TaskModelForm project_id={id} showModal={showModal} clickHandle={taskFormModal} fetchTask={fetchTask} taskData={taskData}/>
-           </div>
+           {
+              taskList.length > 0 &&  <div className="row"> 
+                    { loading && <p>...Loading</p>}
+                    {
+                        !loading && taskList && taskList.map((task) => {
+                            return (
+                                    <TaskCard key={task.id} task={task} taskFormModal={taskFormModal} setLoading={setLoading} fetchTask={fetchTask} setTaskData={setTaskData}/>
+                            )
+                        })
+                    }
+                    
+                </div>
+            }
+            <TaskModelForm project_id={id} showModal={showModal} clickHandle={taskFormModal} fetchTask={fetchTask} taskData={taskData}/>
        </div>
    )
 }
