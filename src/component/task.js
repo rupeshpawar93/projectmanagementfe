@@ -33,7 +33,6 @@ const Task = () => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log("-----------error", error);
             setApiError(true);
         } finally {
             setLoading(false);
@@ -56,7 +55,7 @@ const Task = () => {
 
    const taskFormModal = useCallback(() => {
         setShowModal(!showModal);
-    }, []);
+    }, [showModal]);
 
    if(apiError) {
     return <>

@@ -4,8 +4,6 @@ import React, {useEffect} from "react";
 
 import Project from "./project";
 
-
-
 const Home = () => {
     
     return (

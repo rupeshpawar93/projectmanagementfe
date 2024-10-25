@@ -40,22 +40,20 @@ const TaskForm = (props) => {
                 const response = await FetchAPI('task', 'POST', { title, description, targetCompletionDate, priority, status, label, project_id, assigned_to: isAdmin ? assignedTo : null}, true);
                 const data = await response.json();
                 if(response.status === 200) {
-                    clickHandle(false);
+                    clickHandle();
                     fetchTask(project_id);
                 } else {
                     const errorResponse = errorAPIFormat(data.errors);
-                    console.log("--------errResponse", errorResponse)
                     setErrors(errorResponse);
                 }
             } else {
                 const response = await FetchAPI(`task/${taskData.id}`, 'PATCH', { title, description, targetCompletionDate, priority, status, label, project_id, assigned_to: isAdmin ? assignedTo : null}, true); 
                 const data = await response.json();
                 if(response.status === 200) {
-                    clickHandle(false);
+                    clickHandle();
                     fetchTask(project_id);
                 } else {
                     const errorResponse = errorAPIFormat(data.errors);
-                    console.log("--------errResponse", errorResponse)
                     setErrors(errorResponse);
                 }
             }

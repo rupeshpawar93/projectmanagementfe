@@ -33,7 +33,6 @@ const setKeyInLocalStorage = (key, value) => {
 
 const getKeyInLocalStorage = (key) => {
     const value = localStorage.getItem(key);
-    console.log("---------value", atob(value));
     return value ? atob(value) : null;
 }
 

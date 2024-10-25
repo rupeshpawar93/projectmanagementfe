@@ -3,7 +3,7 @@
 import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Button, Label, Select } from "../reuseable-component/index";
+import { Button, Label, Select, Input } from "../reuseable-component/index";
 
 
 import { FetchAPI, errorAPIFormat } from "../utilities/apiCall";

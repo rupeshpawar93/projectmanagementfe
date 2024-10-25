@@ -3,11 +3,11 @@
 import React from 'react';
 
 class ErrorBoundries extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { error: null, errorInfo: null };
-    }
-    // This method is called if any error is encountered
+  constructor(props) {
+    super(props);
+    this.state = { error: null, errorInfo: null };
+  }
+  // This method is called if any error is encountered
   componentDidCatch(error, errorInfo) {
     // Catch errors in any components below and
     // re-render with error message

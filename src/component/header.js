@@ -8,7 +8,7 @@ import { Button } from "../reuseable-component/index";
 import { removeKeyInLocalStorage } from '../utilities/apiCall';
 
 const Header = () => {
-    const { isAuth, setIsAuth, setIsAdmin }  = useContext(AuthContext)
+    const { isAuth, setIsAuth }  = useContext(AuthContext)
     const navigate = useNavigate();
 
     const logout = () => {
