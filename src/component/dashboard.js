@@ -8,17 +8,27 @@ import Card from '../reuseable-component/card';
 const Dashboard = () => {
     const [loading, setLoading] = useState(false);
     const [ metrics, setMetrics] = useState([]);
+    const [ apiError, setApiError] = useState(false);
     useEffect(()=> {
         fetchMetrics();
     }, []);
 
     const fetchMetrics = async () => {
-        const response  = await FetchAPI('project/metrics', 'GET', {}, true);
-        const data = await response.json();
-        if(response.status === 200) {
-            console.log(data);
-            setMetrics(data.data.metrics)
+        setLoading(true);
+        try {
+            const response  = await FetchAPI('project/metrics', 'GET', {}, true);
+            const data = await response.json();
+            if(response.status === 200) {
+                setMetrics(data.data.metrics)
+            }
+        } catch (error) {
+            setApiError(true);
+        } finally {
+            setLoading(false);
         }
+    }
+    if(apiError) {
+        return  <div className="container-fluid"><Error /></div>
     }
     return (
         <div className="container-fluid">

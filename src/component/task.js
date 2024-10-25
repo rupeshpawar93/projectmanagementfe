@@ -57,11 +57,10 @@ const Task = () => {
     }, [showModal]);
 
     if (apiError) {
-        return <>
+        return
             <div className="container-fluid">
                 <Error />
             </div>
-        </>
     }
     return (
         <>

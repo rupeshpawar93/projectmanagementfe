@@ -29,8 +29,8 @@ const ProjectCard = (props) => {
                     <p className="card-text">Description: {description}</p>
                     <p className="card-text">Target Date: {targetCompletionDate}</p>
                     <div className="d-flex justify-content-between mb-4">
-                        <Link to={`project/${id}`} className="btn btn-primary">Go in Task List</Link>
-                        <Link to={`project/${id}`} className="btn btn-primary">Task Count: {taskCount}</Link>
+                        <Link to={`/project/${id}`} className="btn btn-primary">Go in Task List</Link>
+                        <Link to={`/project/${id}`} className="btn btn-primary">Task Count: {taskCount}</Link>
                     </div>
 
                     {
