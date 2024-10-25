@@ -18,8 +18,8 @@ const router = createBrowserRouter([{
     path: "/",
     element: <App />,
     children: [{
-        path: "/dash-board",
-        element: <Dashboard />
+        path: "/dashboard",
+        element: <Suspense fallback={<Loader />}><Dashboard /></Suspense>
     },{
         path: "/",
         element: <Home />
