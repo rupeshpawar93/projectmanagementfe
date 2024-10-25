@@ -19,7 +19,7 @@ A React application for managing projects with role-based access control. This a
 ### Installation
 
 1. Clone this repository:
-   git clone https://github.com/your-username/project-management-fe.git
+   git clone https://github.com/your-username/projectmanagementfe.git
 2. Go to folder: cd projectmanagementfe
 3. Install all dependencies:  npm install
 4. Add .env file to specify the backend service API url.
