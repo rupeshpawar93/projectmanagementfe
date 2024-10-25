@@ -9,15 +9,14 @@ import { removeKeyInLocalStorage } from '../utilities/apiCall';
 
 const Header = () => {
     const { isAuth, setIsAuth, setIsAdmin }  = useContext(AuthContext)
-    console.log("-----------isAuth", isAuth);
     const navigate = useNavigate();
-    function logout() {
+
+    const logout = () => {
         setIsAuth(!isAuth);
         removeKeyInLocalStorage('token');
         removeKeyInLocalStorage('bhoomika');
         navigate('/signin');
     }
-
 
     if(isAuth) {
         return (

@@ -23,30 +23,30 @@ const ProjectCard=(props) => {
     
     return (
         <div className="col-sm-4 mb-4" key={id}>
-        <div className="card">
-        <div className="card-body">
-            <h5 className="card-title">Name: {name}</h5>
-            <p className="card-text">Description: {description}</p>
-            <p className="card-text">Target Date: {targetCompletionDate}</p>
-            <div className="d-flex justify-content-between mb-4">
-                <Link to={`project/${id}`} className="btn btn-primary">Go in Task List</Link>
-                <Link to={`project/${id}`} className="btn btn-primary">Task Count: {taskCount}</Link>
-            </div>
-
-                {
-                    isAdmin === 'true' && (
-                    <div className="d-flex justify-content-between">
-                        <Button class="btn btn-primary" text="Update" clickHandle={() => {
-                            setProjectData(project);
-                            projectFromModal();
-                            }}/>
-                        <Button class="btn btn-danger" text="Delete" clickHandle={deleteProject}/>
+            <div className="card">
+                <div className="card-body">
+                    <h5 className="card-title">Name: {name}</h5>
+                    <p className="card-text">Description: {description}</p>
+                    <p className="card-text">Target Date: {targetCompletionDate}</p>
+                    <div className="d-flex justify-content-between mb-4">
+                        <Link to={`project/${id}`} className="btn btn-primary">Go in Task List</Link>
+                        <Link to={`project/${id}`} className="btn btn-primary">Task Count: {taskCount}</Link>
                     </div>
-                    )
-                }
+
+                        {
+                            isAdmin === 'true' && (
+                            <div className="d-flex justify-content-between">
+                                <Button class="btn btn-primary" text="Update" clickHandle={() => {
+                                    setProjectData(project);
+                                    projectFromModal();
+                                    }}/>
+                                <Button class="btn btn-danger" text="Delete" clickHandle={deleteProject}/>
+                            </div>
+                            )
+                        }
+                </div>
+            </div>
         </div>
-        </div>
-    </div>
     )
 }
 export default React.memo(ProjectCard);

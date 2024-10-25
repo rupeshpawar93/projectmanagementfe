@@ -7,7 +7,7 @@ import Select from "../reuseable-component/select";
 import { FetchAPI } from "../utilities/apiCall";
 
 const ProjectForm = (props) => {
-    const { fetchProject, clickHandle, projectData, members } = props;
+    const { fetchProject, clickHandle, projectData, members, setApiError } = props;
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState('');
@@ -24,22 +24,28 @@ const ProjectForm = (props) => {
 
     const handleProject = async (e) => {
         e.preventDefault();
-        setLoading(!loading);
+        setLoading(true);
         const buttonClicked = e.nativeEvent.submitter.name;
-        if(buttonClicked === 'submit') {
-            const response = await FetchAPI('project', 'POST', { name, description, targetCompletionDate, assignedMember}, true);
-            const data = await response.json();
-            if(response.status === 200) {
-                clickHandle(false);
-                fetchProject();
+        try {
+            if(buttonClicked === 'submit') {
+                const response = await FetchAPI('project', 'POST', { name, description, targetCompletionDate, assignedMember}, true);
+                const data = await response.json();
+                if(response.status === 200) {
+                    clickHandle(false);
+                    fetchProject();
+                }
+            } else {
+                const response = await FetchAPI(`project/${projectData.id}`, 'PATCH', { name, description, targetCompletionDate, assignedMember}, true);
+                const data = await response.json();
+                if(response.status === 200) {
+                    clickHandle(false);
+                    fetchProject();
+                } 
             }
-        } else {
-            const response = await FetchAPI(`project/${projectData.id}`, 'PATCH', { name, description, targetCompletionDate, assignedMember}, true);
-            const data = await response.json();
-            if(response.status === 200) {
-                clickHandle(false);
-                fetchProject();
-            } 
+        } catch (error) {
+            setApiError(true);
+        } finally {
+            setLoading(false)
         }
     };
 

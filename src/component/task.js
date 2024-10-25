@@ -1,12 +1,13 @@
 
 'use strict'
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { FetchAPI } from '../utilities/apiCall';
 import TaskCard from './taskCard';
 import {Loader, withModal, Button} from '../reuseable-component/index';
 import TaskForm from './taskForm';
+import Error from './error';
 
 const TaskModelForm = withModal(TaskForm);
 
@@ -17,39 +18,53 @@ const Task = () => {
    const [loading, setLoading] = useState(false);
    const [taskData, setTaskData] =  useState({});
    const [memberList, setMemberList] = useState({});
+   const [projectTargetDate, setProjectTargetDate] = useState('');
+   const [apiError, setApiError] = useState(false);
+
+   const fetchTask = useCallback(async (id) => {
+        setLoading(true);
+        try {
+            const response = await FetchAPI(`task/project/${id}`, 'GET', {}, true);
+            const data = await response.json();
+            if(response.status === 200) {
+                setTaskList(data.data.task);
+                setMemberList(data.data.members ?? {});
+                setProjectTargetDate(data.data.projectTargetDate);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log("-----------error", error);
+            setApiError(true);
+        } finally {
+            setLoading(false);
+        }
+    }, [id]);
 
    useEffect(() => {
     fetchTask(id);
-   }, [id])
+   }, [fetchTask])
 
    useEffect(() => {
-    // This will log `memberList` after it is updated
-    console.log("------memberList useEffect", memberList);
-    }, [memberList]);
+    }, [memberList, projectTargetDate]);
    
-   async function fetchTask(id) {
-       setLoading(true);
-       const response = await FetchAPI(`task/project/${id}`, 'GET', {}, true);
-       const data = await response.json();
-       if(response.status === 200) {
-            setTaskList(data.data.task);
-            setMemberList(data.data.members ?? {});
-            setLoading(false);
-            console.log(data.data);
-            console.log("------memberList", memberList);
-            console.log("----------setTaskList", taskList);
-       }
-   }
 
-   const resetFormModal = () => {
+
+   const resetFormModal = useCallback(() => {
         setTaskData({});
         taskFormModal();
-    }
+    }, []);
 
-   const taskFormModal = () => {
+   const taskFormModal = useCallback(() => {
         setShowModal(!showModal);
-    } 
-    
+    }, []);
+
+   if(apiError) {
+    return <>
+        <div className="container-fluid">
+            <Error />
+        </div>
+       </>
+   }
    return (
         <>
        <div className="container-fluid">
@@ -62,14 +77,14 @@ const Task = () => {
                     {
                         !loading && taskList && taskList.map((task) => {
                             return (
-                                    <TaskCard key={task.id} task={task} taskFormModal={taskFormModal} setLoading={setLoading} fetchTask={fetchTask} setTaskData={setTaskData}/>
+                                    <TaskCard key={task.id} task={task} taskFormModal={taskFormModal} setLoading={setLoading} fetchTask={fetchTask} setTaskData={setTaskData} setApiError={setApiError}/>
                             )
                         })
                     }
                     
               </div>
             }
-            { Object.keys(memberList).length > 0 && <TaskModelForm project_id={id} showModal={showModal} clickHandle={taskFormModal} fetchTask={fetchTask} taskData={taskData} memberList={memberList} /> }
+            { Object.keys(memberList).length > 0 && <TaskModelForm project_id={id} showModal={showModal} clickHandle={taskFormModal} fetchTask={fetchTask} taskData={taskData} memberList={memberList} projectTargetDate={projectTargetDate} setApiError={setApiError} /> }
        </div>
        { loading && <Loader /> }
        </>

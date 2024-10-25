@@ -9,8 +9,7 @@ import AuthContext from "../context/authContext";
 
 const TaskForm = (props) => {
     const { isAdmin } = useContext(AuthContext);
-    console.log("-------TaskForm--props", props)
-    const { fetchTask, clickHandle, taskData, project_id, memberList } = props;
+    const { fetchTask, clickHandle, taskData, project_id, memberList , projectTargetDate, setApiError } = props;
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
@@ -36,30 +35,36 @@ const TaskForm = (props) => {
         e.preventDefault();
         setLoading(true);
         const buttonClicked = e.nativeEvent.submitter.name;
-        if(buttonClicked === 'submit') {
-            const response = await FetchAPI('task', 'POST', { title, description, targetCompletionDate, priority, status, label, project_id, assigned_to: isAdmin ? assignedTo : null}, true);
-            const data = await response.json();
-            if(response.status === 200) {
-                clickHandle(false);
-                fetchTask(project_id);
+        try {
+            if(buttonClicked === 'submit') {
+                const response = await FetchAPI('task', 'POST', { title, description, targetCompletionDate, priority, status, label, project_id, assigned_to: isAdmin ? assignedTo : null}, true);
+                const data = await response.json();
+                if(response.status === 200) {
+                    clickHandle(false);
+                    fetchTask(project_id);
+                } else {
+                    const errorResponse = errorAPIFormat(data.errors);
+                    console.log("--------errResponse", errorResponse)
+                    setErrors(errorResponse);
+                }
             } else {
-                const errorResponse = errorAPIFormat(data.errors);
-                console.log("--------errResponse", errorResponse)
-                setErrors(errorResponse);
+                const response = await FetchAPI(`task/${taskData.id}`, 'PATCH', { title, description, targetCompletionDate, priority, status, label, project_id, assigned_to: isAdmin ? assignedTo : null}, true); 
+                const data = await response.json();
+                if(response.status === 200) {
+                    clickHandle(false);
+                    fetchTask(project_id);
+                } else {
+                    const errorResponse = errorAPIFormat(data.errors);
+                    console.log("--------errResponse", errorResponse)
+                    setErrors(errorResponse);
+                }
             }
-        } else {
-            const response = await FetchAPI(`task/${taskData.id}`, 'PATCH', { title, description, targetCompletionDate, priority, status, label, project_id, assigned_to: isAdmin ? assignedTo : null}, true);
-            const data = await response.json();
-            if(response.status === 200) {
-                clickHandle(false);
-                fetchTask(project_id);
-            } else {
-                const errorResponse = errorAPIFormat(data.errors);
-                console.log("--------errResponse", errorResponse)
-                setErrors(errorResponse);
-            }
+        } catch(error) {
+            setApiError(true);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
+        
     };
 
     return (
@@ -92,7 +97,7 @@ const TaskForm = (props) => {
                     </div>
                     <div className="form-group  my-4">
                         <Label forId="targetCompletionDate" text="Target Completion Date"/>
-                        <Input type="date" class="form-control" set={setTargetCompletionDate} value={targetCompletionDate} name="targetCompletionDate" id="targetCompletionDate" required="true" />
+                        <Input type="date" class="form-control" set={setTargetCompletionDate} value={targetCompletionDate} name="targetCompletionDate" id="targetCompletionDate" required="true"  max={projectTargetDate.split('T')[0]}/>
                         { errors && errors['targetCompletionDate'] && <span className="text-danger">{errors['targetCompletionDate']}</span>}
                     </div>
                     {

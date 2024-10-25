@@ -1,6 +1,6 @@
 'use strict'
-import React from 'react';
-import ReactDom from 'react-dom';
+import React, { lazy, Suspense } from 'react';
+import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -8,14 +8,20 @@ import App from './src/component/app';
 import Home from './src/component/home';
 import Signin from './src/component/signin';
 import SignUp from './src/component/signup';
-import Project from './src/component/project';
-import Task from './src/component/task';
+import { Loader } from './src/reuseable-component';
+
+const Task = lazy(() => import('./src/component/task'));
+const Project = lazy(() => import('./src/component/project'));
+const Dashboard = lazy(() => import('./src/component/dashboard'));
 
 const router = createBrowserRouter([{
     path: "/",
     element: <App />,
     children: [{
-        path: "",
+        path: "/dash-board",
+        element: <Dashboard />
+    },{
+        path: "/",
         element: <Home />
     },{
         path: "/signin",
@@ -25,12 +31,12 @@ const router = createBrowserRouter([{
         element: <SignUp />
     },{
         path: "/project",
-        element: <Project />
+        element: <Suspense fallback={<Loader />}><Project /></Suspense>
     }, {
         path: "/project/:id",
-        element: <Task />
+        element: <Suspense fallback={<Loader />}><Task /></Suspense>
     }]
 }]);
 
-const root = ReactDom.createRoot(document.getElementById("app"));
+const root = createRoot(document.getElementById("app"));
 root.render(<RouterProvider router={router} />);

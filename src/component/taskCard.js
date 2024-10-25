@@ -7,18 +7,23 @@ import { FetchAPI } from '../utilities/apiCall';
 import { labelList, statusList, priorityList, priorityColor } from "../utilities/constants";
 
 const TaskCard = (props) => {
-    const { task, fetchTask, setLoading, setTaskData, taskFormModal } = props;
+    const { task, fetchTask, setLoading, setTaskData, taskFormModal, setApiError } = props;
     const { project_id: id } = task;
     const navigate = useNavigate()
 
     async function deleteTask() {
         setLoading(true);
-        const response = await FetchAPI(`task/${task.id}`, 'DELETE', {}, true);
-        console.log("---------delete api called");
-        const data = await response.json();
-        if(response.status===200) {
+        try {
+            const response = await FetchAPI(`task/${task.id}`, 'DELETE', {}, true);
+            const data = await response.json();
+            if(response.status===200) {
+                setLoading(false);
+                fetchTask(id);
+            }
+        } catch (error) {
+            setApiError(true)
+        } finally {
             setLoading(false);
-            fetchTask(id);
         }
     }
 
@@ -43,4 +48,4 @@ const TaskCard = (props) => {
       </div>)
 }
 
-export default TaskCard;
+export default React.memo(TaskCard);

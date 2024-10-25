@@ -1,17 +1,17 @@
 'use strict'
 
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import ProjectForm from "./projectForm";
 import ProjectCard from "./projectCard";
 import { withModal, Loader, Button} from "../reuseable-component/index";
 import { FetchAPI } from "../utilities/apiCall";
 import AuthContext from "../context/authContext";
+import Error from "./error";
 
 const ProjectModalForm = withModal(ProjectForm);
 
 const Project = () => {
     const { isAdmin } = useContext(AuthContext);
-    console.log("--------isAdmin-------", isAdmin);
     const [projects, setProjects] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [pageSize, setPageSize] = useState(10);
@@ -19,36 +19,45 @@ const Project = () => {
     const [loading, setLoading] = useState(false);
     const [projectData, setProjectData] = useState({});
     const [members, setMembers] = useState({});
+    const [apiError, setApiError] = useState(false);
+
+    const fetchProject = useCallback(async () => {
+        setLoading(true);
+        try {
+            const response = await FetchAPI(`project?pageNo=${pageNo}&pageSize=${pageSize}`, 'GET', {}, true);
+            const data = await response.json();
+            if(response.status===200) {
+                setProjects(prev=>{
+                    return [...data.data.project]
+                });
+                setMembers(data.data.members);
+                setLoading(false);
+            }
+        } catch (error) {
+            setApiError(true);
+        } finally {
+            setLoading(false);
+        }
+    }, [pageNo, pageSize])
 
     useEffect(() => {
       fetchProject();
       return () => {
       }
-    }, [pageNo, pageSize])
+    }, [fetchProject])
     
-    async function fetchProject() {
-        setLoading(true);
-        const response = await FetchAPI(`project?pageNo=${pageNo}&pageSize=${pageSize}`, 'GET', {}, true);
-        const data = await response.json();
-        if(response.status===200) {
-            console.log("============data", data);
-            setProjects(prev=>{
-                return [...data.data.project]
-            });
-            setMembers(data.data.members);
-            setLoading(false);
-        }
-    }
-
-    const resetFormModal = () => {
+    const resetFormModal = useCallback(() => {
         setProjectData({});
         projectFromModal();
-    }
+    }, [])
 
-    const projectFromModal = () => {
+    const projectFromModal = useCallback(() => {
         setShowModal(!showModal);
-    }
+    }, []);
 
+    if(apiError) {
+        return <Error />
+    }
     return (
         <div className="container-fluid">
             <div className="d-flex row my-4">
@@ -61,10 +70,9 @@ const Project = () => {
                         return (
                            <ProjectCard key={project.id} project={project} projectFromModal={projectFromModal} setLoading={setLoading} fetchProject={fetchProject} setProjectData={setProjectData}/>
                         )
-
                     })
                 }
-                <ProjectModalForm members={members} showModal={showModal} clickHandle={projectFromModal} fetchProject={fetchProject} projectData={projectData}/>
+                <ProjectModalForm members={members} showModal={showModal} clickHandle={projectFromModal} fetchProject={fetchProject} projectData={projectData} setApiError={setApiError}/>
             </div>
             { loading && <Loader /> }
         </div>
