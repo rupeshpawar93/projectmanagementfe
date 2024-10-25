@@ -3,7 +3,7 @@
 import React from "react";
 
 const withModal = (Component) => {
-    return function({ showModal, clickHandle, ...props }) {
+    return function ({ showModal, clickHandle, ...props }) {
 
         return (
             <>
@@ -16,7 +16,7 @@ const withModal = (Component) => {
                             </div>
 
                             <div className="modal-body">
-                                <Component {...props} clickHandle={clickHandle}/>
+                                <Component {...props} clickHandle={clickHandle} />
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={clickHandle}>Close</button>

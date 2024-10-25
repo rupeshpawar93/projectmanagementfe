@@ -14,15 +14,15 @@ const App = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    useEffect(()=> {
+    useEffect(() => {
         setIsAuth(getKeyInLocalStorage('token') ? true : false);
-        setIsAdmin(getKeyInLocalStorage('bhoomika')?? false);
+        setIsAdmin(getKeyInLocalStorage('bhoomika') ?? false);
         checkIsLogin();
     }, [isAuth])
 
     const checkIsLogin = () => {
         const tokenExpiry = isTokenExpired();
-        if(tokenExpiry) {
+        if (tokenExpiry) {
             removeKeyInLocalStorage('token');
             setIsAuth(false);
             removeKeyInLocalStorage('bhoomika');
@@ -34,7 +34,7 @@ const App = () => {
     }
     return (
         <ErrorBoundries>
-            <AuthContext.Provider value={{isAuth, setIsAuth, isAdmin, setIsAdmin}} >
+            <AuthContext.Provider value={{ isAuth, setIsAuth, isAdmin, setIsAdmin }} >
                 <div className="container-fluid">
                     <Header />
                     <main className="py-3">

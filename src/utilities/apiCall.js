@@ -1,15 +1,15 @@
 'use strict'
 
-const FetchAPI = async (url, method, payload, authRequired=false) => {
+const FetchAPI = async (url, method, payload, authRequired = false) => {
     const headers = {
         'Content-Type': 'application/json',
     };
     let config = {};
-    if(authRequired) {
+    if (authRequired) {
         const token = getKeyInLocalStorage('token');
         headers['authorization'] = `Bearer ${token}`;
     }
-    if(method === 'GET') {
+    if (method === 'GET') {
         config = {
             method,
             headers
@@ -22,7 +22,7 @@ const FetchAPI = async (url, method, payload, authRequired=false) => {
         }
     }
     const response = await fetch(`${process.env.REACT_APP_API_URL}/${url}`, {
-       ...config
+        ...config
     });
     return response;
 }
@@ -42,10 +42,10 @@ const removeKeyInLocalStorage = (key) => {
 
 const errorAPIFormat = (error) => {
     let errorMapper = {};
-    if(typeof error === 'object' ) {
-       for(let err of error) {
-        errorMapper[err['path']] = err['msg'] || err['message']
-       }
+    if (typeof error === 'object') {
+        for (let err of error) {
+            errorMapper[err['path']] = err['msg'] || err['message']
+        }
     }
     return errorMapper;
 }
@@ -54,22 +54,22 @@ const isTokenExpired = () => {
     const encodedToken = localStorage.getItem('token');
     if (!encodedToken) return true;
     try {
-      const token = atob(encodedToken);
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-  
-      const payload = JSON.parse(jsonPayload);
-      if (!payload.exp) {
-        return true;
-      }
-      const expiry = payload.exp * 1000;
-      return Date.now() > expiry;
+        const token = atob(encodedToken);
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        const payload = JSON.parse(jsonPayload);
+        if (!payload.exp) {
+            return true;
+        }
+        const expiry = payload.exp * 1000;
+        return Date.now() > expiry;
     } catch (e) {
-      console.error('Failed to decode token', e);
-      return true;
+        console.error('Failed to decode token', e);
+        return true;
     }
 };
 

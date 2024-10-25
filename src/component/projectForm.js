@@ -38,7 +38,6 @@ const ProjectForm = (props) => {
                 const data = await response.json();
                 if (response.status === 200) {
                     clickHandle();
-                    console.log("---------click handle---");
                     fetchProject();
                 }
             }

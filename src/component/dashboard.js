@@ -10,7 +10,7 @@ const Dashboard = () => {
                 <h2 className="text-center my-4">Dashboard & Metrics</h2>
 
             </div>
-            
+
         </div>
     )
 
