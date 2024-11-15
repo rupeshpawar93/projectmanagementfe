@@ -13,6 +13,7 @@ import { Loader } from './src/reuseable-component';
 const Task = lazy(() => import('./src/component/task'));
 const Project = lazy(() => import('./src/component/project'));
 const Dashboard = lazy(() => import('./src/component/dashboard'));
+const Profile = lazy(() => import('./src/component/profile'));
 
 const router = createBrowserRouter([{
     path: "/",
@@ -20,16 +21,19 @@ const router = createBrowserRouter([{
     children: [{
         path: "/dashboard",
         element: <Suspense fallback={<Loader />}><Dashboard /></Suspense>
-    },{
+    }, {
         path: "/",
         element: <Home />
-    },{
+    }, {
+        path: "/profile",
+        element: <Suspense fallback={<Loader />}><Profile /></Suspense>
+    }, {
         path: "/signin",
         element: <Signin />
     }, {
         path: "/signup",
         element: <SignUp />
-    },{
+    }, {
         path: "/project",
         element: <Suspense fallback={<Loader />}><Project /></Suspense>
     }, {

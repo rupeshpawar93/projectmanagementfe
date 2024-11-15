@@ -1,31 +1,8 @@
 'use strict'
 
-const FetchAPI = async (url, method, payload, authRequired = false) => {
-    const headers = {
-        'Content-Type': 'application/json',
-    };
-    let config = {};
-    if (authRequired) {
-        const token = getKeyInLocalStorage('token');
-        headers['authorization'] = `Bearer ${token}`;
-    }
-    if (method === 'GET') {
-        config = {
-            method,
-            headers
-        }
-    } else {
-        config = {
-            method,
-            headers,
-            body: JSON.stringify(payload)
-        }
-    }
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/${url}`, {
-        ...config
-    });
-    return response;
-}
+import { useNavigate } from "react-router-dom";
+
+
 
 const setKeyInLocalStorage = (key, value) => {
     localStorage.setItem(key, btoa(value));
@@ -73,4 +50,4 @@ const isTokenExpired = () => {
     }
 };
 
-export { FetchAPI, setKeyInLocalStorage, getKeyInLocalStorage, removeKeyInLocalStorage, isTokenExpired, errorAPIFormat };
+export {  setKeyInLocalStorage, getKeyInLocalStorage, removeKeyInLocalStorage, isTokenExpired, errorAPIFormat };

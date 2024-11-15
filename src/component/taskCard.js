@@ -3,10 +3,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../reuseable-component/index";
-import { FetchAPI } from '../utilities/apiCall';
 import { labelList, statusList, priorityList, priorityColor } from "../utilities/constants";
+import { useFetchAPI } from "../utilities/customHook";
 
 const TaskCard = (props) => {
+    const FetchAPI = useFetchAPI();
     const { task, fetchTask, setLoading, setTaskData, taskFormModal, setApiError } = props;
     const { project_id: id } = task;
     const navigate = useNavigate()
@@ -15,8 +16,8 @@ const TaskCard = (props) => {
         setLoading(true);
         try {
             const response = await FetchAPI(`task/${task.id}`, 'DELETE', {}, true);
-            const data = await response.json();
-            if (response.status === 200) {
+            const { status, data } = response;
+            if (status === 200) {
                 setLoading(false);
                 fetchTask(id);
             }

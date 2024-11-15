@@ -3,10 +3,11 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../reuseable-component/index";
-import { FetchAPI } from "../utilities/apiCall";
 import AuthContext from "../context/authContext";
+import { useFetchAPI } from "../utilities/customHook";
 
 const ProjectCard = (props) => {
+    const FetchAPI = useFetchAPI();
     const { isAdmin } = useContext(AuthContext);
     const { project, projectFromModal, fetchProject, setLoading, setProjectData } = props
     const { id, name, description, targetCompletionDate, taskCount } = project
@@ -14,8 +15,8 @@ const ProjectCard = (props) => {
     async function deleteProject() {
         setLoading(true);
         const response = await FetchAPI(`project/${id}`, 'DELETE', {}, true);
-        const data = await response.json();
-        if (response.status === 200) {
+        const { status, data } = response;
+        if (status === 200) {
             fetchProject();
             setLoading(false);
         }

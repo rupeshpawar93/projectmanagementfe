@@ -1,11 +1,12 @@
 'use strict'
 
 import React, { useEffect, useState } from 'react';
-import { FetchAPI } from '../utilities/apiCall';
 import { Loader } from '../reuseable-component';
 import Card from '../reuseable-component/card';
+import { useFetchAPI } from '../utilities/customHook';
 
 const Dashboard = () => {
+    const FetchAPI = useFetchAPI();
     const [loading, setLoading] = useState(false);
     const [ metrics, setMetrics] = useState([]);
     const [ apiError, setApiError] = useState(false);
@@ -17,8 +18,8 @@ const Dashboard = () => {
         setLoading(true);
         try {
             const response  = await FetchAPI('project/metrics', 'GET', {}, true);
-            const data = await response.json();
-            if(response.status === 200) {
+            const { status, data } = response;
+            if (status === 200) {
                 setMetrics(data.data.metrics)
             }
         } catch (error) {

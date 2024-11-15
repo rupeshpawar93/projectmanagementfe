@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { Label, Input, Button, Select, Loader } from "../reuseable-component/index";
-import { FetchAPI } from "../utilities/apiCall";
+import { useFetchAPI } from "../utilities/customHook";
 
 const ProjectForm = (props) => {
+    const FetchAPI = useFetchAPI();
     const { fetchProject, clickHandle, projectData, members, setApiError } = props;
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
@@ -35,8 +36,8 @@ const ProjectForm = (props) => {
                 }
             } else {
                 const response = await FetchAPI(`project/${projectData.id}`, 'PATCH', { name, description, targetCompletionDate, assignedMember }, true);
-                const data = await response.json();
-                if (response.status === 200) {
+                const { status, data } = response;
+                if (status === 200) {
                     clickHandle();
                     fetchProject();
                 }

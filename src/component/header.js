@@ -48,6 +48,7 @@ const Header = () => {
 
                         {/* Signout button (visible as text on large screens, icon on small screens) */}
                         <div className="d-flex align-items-center">
+                            <Link className="btn btn-link" to="/profile">Edit Profile</Link>
                             <Button 
                                 className="btn btn-link d-none d-lg-inline" 
                                 text="Signout" 

@@ -3,11 +3,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { Label, Button, Input, Loader, Select } from "../reuseable-component/index";
-import { FetchAPI, errorAPIFormat } from "../utilities/apiCall";
+import { errorAPIFormat } from "../utilities/apiCall";
 import { labelList, statusList, priorityList } from "../utilities/constants";
 import AuthContext from "../context/authContext";
+import { useFetchAPI } from "../utilities/customHook";
 
 const TaskForm = (props) => {
+    const FetchAPI = useFetchAPI();
     const { isAdmin } = useContext(AuthContext);
     const { fetchTask, clickHandle, taskData, project_id, memberList, projectTargetDate, setApiError } = props;
     const [title, setTitle] = useState('');
@@ -38,8 +40,8 @@ const TaskForm = (props) => {
         try {
             if (buttonClicked === 'submit') {
                 const response = await FetchAPI('task', 'POST', { title, description, targetCompletionDate, priority, status, label, project_id, assigned_to: isAdmin ? assignedTo : null }, true);
-                const data = await response.json();
-                if (response.status === 200) {
+                const { status, data } = response;
+                if (status === 200) {
                     clickHandle();
                     fetchTask(project_id);
                 } else {

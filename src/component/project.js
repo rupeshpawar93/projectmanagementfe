@@ -4,13 +4,14 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import ProjectForm from "./projectForm";
 import ProjectCard from "./projectCard";
 import { withModal, Loader, Button } from "../reuseable-component/index";
-import { FetchAPI } from "../utilities/apiCall";
 import AuthContext from "../context/authContext";
 import Error from "./error";
+import { useFetchAPI } from "../utilities/customHook";
 
 const ProjectModalForm = withModal(ProjectForm);
 
 const Project = () => {
+    const FetchAPI = useFetchAPI();
     const { isAdmin } = useContext(AuthContext);
     const [projects, setProjects] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -25,15 +26,18 @@ const Project = () => {
         setLoading(true);
         try {
             const response = await FetchAPI(`project?pageNo=${pageNo}&pageSize=${pageSize}`, 'GET', {}, true);
-            const data = await response.json();
-            if (response.status === 200) {
+            const { status, data } = response;
+            if (status === 200) {
                 setProjects(prev => {
                     return [...data.data.project]
                 });
                 setMembers(data.data.members);
                 setLoading(false);
+            } else {
+                
             }
         } catch (error) {
+            console.log("---------error", error);
             setApiError(true);
         } finally {
             setLoading(false);

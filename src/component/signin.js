@@ -8,10 +8,12 @@ import { Link } from "react-router-dom";
 
 import AuthContext from "../context/authContext";
 import { Input, Button, Label } from "../reuseable-component/index";
-import { FetchAPI, setKeyInLocalStorage, errorAPIFormat } from "../utilities/apiCall";
+import { setKeyInLocalStorage, errorAPIFormat } from "../utilities/apiCall";
+import { useFetchAPI } from "../utilities/customHook";
 
 
 const Signin = () => {
+    const FetchAPI = useFetchAPI();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
@@ -30,8 +32,8 @@ const Signin = () => {
         }
         if (Object.keys(errorObj).length === 0) {
             const response = await FetchAPI('user/signin', 'POST', { username, password }, false);
-            const data = await response.json();
-            if (response.status === 200) {
+            const { status, data } = response;
+            if (status === 200) {
                 setIsAuth(true);
                 setKeyInLocalStorage('token', data.data.token)
                 setIsAdmin(data.data.isAdmin)

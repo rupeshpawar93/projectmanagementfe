@@ -4,13 +4,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Button, Label, Select, Input } from "../reuseable-component/index";
-import { FetchAPI, errorAPIFormat } from "../utilities/apiCall";
+import { errorAPIFormat } from "../utilities/apiCall";
 import { roleList } from "../utilities/constants";
+import { useFetchAPI } from "../utilities/customHook";
 
 const SignUp = () => {
+    const FetchAPI = useFetchAPI();
     const [name, setName] = useState('')
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('');
     const [errors, setErrors] = useState({});
@@ -25,9 +28,9 @@ const SignUp = () => {
         if (Object.keys(error).length > 0) {
             setErrors(error);
         } else {
-            const response = await FetchAPI('user/signup', 'POST', { name, username, password, confirmPassword, role }, false);
-            const data = await response.json();
-            if (response.status === 200) {
+            const response = await FetchAPI('user/signup', 'POST', { name, username, password, confirmPassword, role, email }, false);
+            const { status, data } = response;
+            if (status === 200) {
                 navigate('/signin');
             } else {
                 const errorResponse = errorAPIFormat(data.data.errors);
@@ -52,6 +55,11 @@ const SignUp = () => {
                                 <Label class="form-label" forId="username" text="Username" />
                                 <Input type="text" name="username" value={username} id="username" set={setUsername} class="form-control form-control-md" required="true" />
                                 {errors && errors.username && <span className="text-danger">{errors.username}</span>}
+                            </div> 
+                            <div className="form-outline mb-4">
+                                <Label class="form-label" forId="email" text="Email" />
+                                <Input type="email" name="email" value={email} id="email" set={setEmail} class="form-control form-control-md" required="true" />
+                                {errors && errors.email && <span className="text-danger">{errors.email}</span>}
                             </div>
                             <div className="form-outline mb-4">
                                 <Label class="form-label" forId="role" text="Role" />

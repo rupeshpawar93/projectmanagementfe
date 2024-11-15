@@ -3,15 +3,16 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { FetchAPI } from '../utilities/apiCall';
 import TaskCard from './taskCard';
 import { Loader, withModal, Button } from '../reuseable-component/index';
 import TaskForm from './taskForm';
 import Error from './error';
+import { useFetchAPI } from '../utilities/customHook';
 
 const TaskModelForm = withModal(TaskForm);
 
 const Task = () => {
+    const FetchAPI = useFetchAPI();
     const { id } = useParams();
     const [showModal, setShowModal] = useState(false);
     const [taskList, setTaskList] = useState([]);
@@ -25,8 +26,8 @@ const Task = () => {
         setLoading(true);
         try {
             const response = await FetchAPI(`task/project/${id}`, 'GET', {}, true);
-            const data = await response.json();
-            if (response.status === 200) {
+            const { status, data } = response;
+            if (status === 200) {
                 setTaskList(data.data.task);
                 setMemberList(data.data.members ?? {});
                 setProjectTargetDate(data.data.projectTargetDate);
