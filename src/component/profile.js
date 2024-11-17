@@ -13,6 +13,7 @@ const Profile = () => {
     const [email, setEmail] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [success, setSuccess] = useState('');
 
     useEffect(() => {
         const fetchUserDetail = async () => {
@@ -40,12 +41,14 @@ const Profile = () => {
         } else {
             const response   = await FetchAPI('user', 'PATCH', {password, confirmPassword}, true);
             const { status, data } = response;
+            console.log("------data", data);
             if (status !== 200) {
                 const errorResponse = errorAPIFormat(data.data.errors);
                 setErrors(errorResponse);
             } else {
                 setPassword('');
                 setConfirmPassword('');
+                setSuccess('')
             }
         }
         setLoading(false);

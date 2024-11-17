@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from '../context/authContext';
 
-import { Button } from "../reuseable-component/index";
+import { Button, Input } from "../reuseable-component/index";
 import { removeKeyInLocalStorage } from '../utilities/apiCall';
 
 const Header = () => {
@@ -12,7 +12,7 @@ const Header = () => {
     const navigate = useNavigate();
 
     const logout = () => {
-        setIsAuth(false);  // Explicitly set to false instead of toggling
+        setIsAuth(false);
         removeKeyInLocalStorage('token');
         removeKeyInLocalStorage('bhoomika');
         navigate('/signin');
@@ -31,12 +31,12 @@ const Header = () => {
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="/">Project Management</Link>
-                    
+
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
 
-                    <div className="collapse navbar-collapse" id="navbarNav">
+                    <div className="collapse navbar-collapse justify-content-between" id="navbarNav">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
                                 <Link className="nav-link" to="/dashboard">Dashboard</Link>
@@ -44,15 +44,19 @@ const Header = () => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/project">Project</Link>
                             </li>
+                            <li className="nav-item d-md-none">
+                                <Link className="nav-link" to="/profile">Edit Profile</Link>
+                            </li>
                         </ul>
-
+                        
                         {/* Signout button (visible as text on large screens, icon on small screens) */}
-                        <div className="d-flex align-items-center">
-                            <Link className="btn btn-link" to="/profile">Edit Profile</Link>
-                            <Button 
-                                className="btn btn-link d-none d-lg-inline" 
-                                text="Signout" 
-                                clickHandle={logout} 
+                        <div className="d-flex  align-items-center">
+                           
+                            <Link className="btn btn-link d-none d-lg-inline" to="/profile">Edit Profile</Link>
+                            <Button
+                                className="btn btn-link d-none d-lg-inline"
+                                text="Signout"
+                                clickHandle={logout}
                             />
                         </div>
                     </div>
